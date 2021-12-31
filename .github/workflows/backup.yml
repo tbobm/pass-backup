@@ -41,7 +41,7 @@ jobs:
       - name: "Copy the archive to the S3 bucket"
         env:
           BRANCH: ${{ steps.vars.outputs.branch }}
-          SOURCE_FILE: definitions
+          SOURCE_FILE: "pass-backup_${{ steps.vars.outputs.date }}.tar.gz"
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_BUCKET_KEY: ${{ secrets.S3_BUCKET_KEY }}
         run: |
