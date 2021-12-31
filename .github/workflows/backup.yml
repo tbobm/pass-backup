@@ -1,0 +1,48 @@
+---
+name: "pass-backup:archive"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  archive-repository:
+    runs-on: "ubuntu-latest"
+    name: "Create an archive and upload it to S3"
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2
+
+      - name: Get the current branch name
+        run: |
+          echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+          echo "::set-output name=date::$(date '+%F')"
+        id: vars
+
+      - name: Configure AWS credentials
+        env:
+          BACKUP_DATE: ${{ steps.vars.outputs.date }}
+        run: |
+          tar cvf "pass-backup_${BACKUP_DATE}.tar.gz" ./passwords
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "pass-backup_${{ steps.vars.outputs.date }}.tar.gz"
+          path: |
+            pass-backup_*.tar.gz
+
+      - name: Create the tar gz archive
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: "Copy the sfn file to the S3 bucket"
+        env:
+          BRANCH: ${{ steps.vars.outputs.branch }}
+          SOURCE_FILE: definitions
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_BUCKET_KEY: ${{ secrets.S3_BUCKET_KEY }}
+        run: |
+          aws s3 cp "${SOURCE_FILE}" "s3://${S3_BUCKET_NAME}/${S3_BUCKET_KEY}/$(date '+%F').tar.gz"
