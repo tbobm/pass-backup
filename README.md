@@ -14,3 +14,10 @@ See: [_pass, the standard unix password manager_][pass]
 ### next steps
 
 - [ ] KMS encryption
+
+## Example
+
+```console
+$ export PASSWORD_STORE_DIR=$PWD/passwords/
+$ pass git init
+```
