@@ -22,7 +22,7 @@ jobs:
         env:
           BACKUP_DATE: ${{ steps.vars.outputs.date }}
         run: |
-          tar cvf "pass-backup_${BACKUP_DATE}.tar.gz" ./passwords
+          tar czvf "pass-backup_${BACKUP_DATE}.tar.gz" ./passwords
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
