@@ -12,33 +12,33 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v2
 
-      - name: Get the current branch name
+      - name: "Set utility variables"
         run: |
           echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
           echo "::set-output name=date::$(date '+%F')"
         id: vars
 
-      - name: Configure AWS credentials
+      - name: "Create the tar gz password archive"
         env:
           BACKUP_DATE: ${{ steps.vars.outputs.date }}
         run: |
           tar czvf "pass-backup_${BACKUP_DATE}.tar.gz" ./passwords
 
-      - name: Archive production artifacts
+      - name: "Backup the generated tarball"
         uses: actions/upload-artifact@v2
         with:
           name: "pass-backup_${{ steps.vars.outputs.date }}.tar.gz"
           path: |
             pass-backup_*.tar.gz
 
-      - name: Create the tar gz archive
+      - name: "Configure the AWS credentials"
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: "Copy the sfn file to the S3 bucket"
+      - name: "Copy the archive to the S3 bucket"
         env:
           BRANCH: ${{ steps.vars.outputs.branch }}
           SOURCE_FILE: definitions
