@@ -1,5 +1,6 @@
 module "bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 2"
 
   bucket = "tbobm-bucket-pass-backup"
   acl    = "private"
