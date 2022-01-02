@@ -45,6 +45,10 @@ module "secrets" {
       name      = "S3_BUCKET_KEY"
       plaintext = "pass-backup/prod/archive"
     }
+    region = {
+      name      = "AWS_REGION"
+      plaintext = "eu-west-3"
+    }
   }
 }
 
