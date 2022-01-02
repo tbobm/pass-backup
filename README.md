@@ -81,8 +81,7 @@ You **must** edit the following in the `./terraform/main.tf` file:
 ### Create the Terraform resources
 
 Then, you can run the following commands in the `terraform` directory:
-```console
-$ terraform init
+```console $ terraform init
 $ terraform apply
 ```
 
@@ -114,3 +113,13 @@ trigger the `pass-backup:archvie` Worfklow using `workflow_dispatch`.
 See [Manual events - workflow_dispatch][gh-dispatch] for more informations.
 
 [gh-dispatch]: https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#manual-events
+
+### Access your backups
+
+The tarball archives are located in S3:
+```console
+$ aws s3 ls s3://tbobm-bucket-pass-backup/pass-backup/prod/archive/
+2022-01-02 23:10:57        162 2022-01-02.tar.gz
+```
+
+The S3 Bucket key can be overriden in the `./terraform/main.tf` file.
