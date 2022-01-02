@@ -63,6 +63,7 @@ $ export GITHUB_TOKEN=ghp_xxxxxxxxxx
 ```
 
 _See [Github Provider Authentication][gh-tf] for more information_
+
 [gh-tf]: https://registry.terraform.io/providers/integrations/github/latest/docs#authentication
 
 As for the AWS Terraform provider, please refer to the corresponding
