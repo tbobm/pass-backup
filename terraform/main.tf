@@ -12,7 +12,7 @@ module "bucket" {
 
 module "backup_user" {
   source = "cloudposse/iam-system-user/aws"
-  # version     = "x.x.x"
+  version     = "~> 0.23"
   namespace = "pass-backup"
   stage     = "prod"
   name      = "archived"
@@ -57,4 +57,5 @@ output "aws_access_key_id" {
 output "aws_secret_access_key" {
   description = "The AWS Secret Access Key of the archive user"
   value       = module.backup_user.secret_access_key
+  sensitive   = true
 }
