@@ -22,6 +22,32 @@ module "backup_user" {
   }
 }
 
+module "secrets" {
+  source  = "tbobm/secrets/github"
+  version = "1.1.2"
+
+  repository = "pass-backup"
+
+  secrets = {
+    access_key_id = {
+      name      = "AWS_ACCESS_KEY_ID"
+      plaintext = module.backup_user.access_key_id
+    }
+    secret_access_key = {
+      name      = "AWS_SECRET_ACCESS_KEY"
+      plaintext = module.backup_user.secret_access_key
+    }
+    s3_bucket_name = {
+      name      = "S3_BUCKET_NAME"
+      plaintext = module.bucket.s3_bucket_id
+    }
+    s3_bucket_key = {
+      name      = "S3_BUCKET_KEY"
+      plaintext = "pass-backup/prod/archive"
+    }
+  }
+}
+
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions = [
