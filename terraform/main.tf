@@ -11,8 +11,8 @@ module "bucket" {
 }
 
 module "backup_user" {
-  source = "cloudposse/iam-system-user/aws"
-  version     = "~> 0.23"
+  source    = "cloudposse/iam-system-user/aws"
+  version   = "~> 0.23"
   namespace = "pass-backup"
   stage     = "prod"
   name      = "archived"
